@@ -1,19 +1,16 @@
 """
 Design Requirement Multi-Label Classifier
-==========================================
-WHAT THIS CODE DOES (explain like I'm 5):
-------------------------------------------
 Imagine you have thousands of engineering sentences like:
     "The system shall respond within 2ms under full load."
 
-Your job is to automatically tag each sentence with categories like:
+the job is to automatically tag each sentence with categories like:
     ✓ performance_test
     ✓ timing_requirement
     ✗ safety_test  (not relevant)
 
 One sentence can have MULTIPLE tags at once — that's called multi-label classification.
 
-HOW IT WORKS (step by step):
+HOW IT WORKS:
 ------------------------------
 1. A pretrained encoder (like BERT) reads the sentence and turns it
    into a list of numbers that captures its meaning — like a fingerprint.
