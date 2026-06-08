@@ -11,9 +11,9 @@ the job is to automatically tag each sentence with categories like:
 One sentence can have MULTIPLE tags at once — that's called multi-label classification.
 
 HOW IT WORKS:
-------------------------------
+
 1. A pretrained encoder (like BERT) reads the sentence and turns it
-   into a list of numbers that captures its meaning — like a fingerprint.
+   into a list of numbers that captures its meaning, like a fingerprint.
 
 2. Our small neural network (the "head") looks at that fingerprint
    and outputs a score (0 to 1) for each of the 50 possible categories.
@@ -22,7 +22,7 @@ HOW IT WORKS:
    If a score is < 0.5, we say "no."
 
 WHY SIGMOID AND NOT SOFTMAX?
-------------------------------
+
 - Softmax: forces all scores to add up to 1 — use when only ONE answer is correct
            (like image classification: is this a cat OR a dog?)
 - Sigmoid: each score is independent — use when MULTIPLE answers can be correct
@@ -37,12 +37,12 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader
 
 
-# ── PART 1 & 2: The Classification Head ──────────────────────────────────────
+#  PART 1 & 2: The Classification Head 
 #
 # Think of the pretrained encoder (BERT) as a very smart reader.
 # It reads a sentence and gives us back a rich description (768 numbers).
 #
-# But BERT doesn't know about OUR 50 categories — it was trained on general text.
+# But BERT doesn't know about OUR 50 categories, it was trained on general text.
 # So we add a small "head" network on top that learns OUR specific categories.
 #
 # The head is a 2-layer MLP (Multi-Layer Perceptron):
@@ -116,7 +116,7 @@ class MultiLabelClassificationHead(nn.Module):
         return x
 
 
-# ── PART 3: Training Loop ─────────────────────────────────────────────────────
+#  PART 3: Training Loop 
 #
 # This function trains the model for ONE full pass over the training data.
 # One full pass is called an "epoch".
@@ -174,31 +174,31 @@ def train_one_epoch(
         attention_mask = attention_mask.to(device)  # (batch, seq_len)
         labels         = labels.to(device).float()  # (batch, num_classes) — multi-hot
 
-        # ── Step 1: zero out gradients from the previous batch ──
+        #  Step 1: zero out gradients from the previous batch 
         # If we don't do this, gradients ACCUMULATE across batches,
         # which gives wrong updates. Always clear before each step.
         optimizer.zero_grad()
 
-        # ── Step 2: forward pass through BERT ──
+        #  Step 2: forward pass through BERT 
         # encoder returns (batch_size, seq_len, hidden_dim)
         # We only care about the CLS token — position 0 — which BERT
         # trains to be a summary of the whole sentence.
         encoder_output = encoder(input_ids, attention_mask)
         cls_token      = encoder_output[:, 0, :]    # (batch, hidden_dim)
 
-        # ── Step 3: forward pass through our classification head ──
+        #  Step 3: forward pass through our classification head 
         logits = head(cls_token)                    # (batch, num_classes)
 
-        # ── Step 4: compute loss ──
+        #  Step 4: compute loss 
         # Compare our predictions (logits) to the correct labels
         loss = criterion(logits, labels)
 
-        # ── Step 5: backward pass ──
+        #  Step 5: backward pass 
         # PyTorch computes gradients for every parameter:
         # "how should I change each weight to reduce the loss?"
         loss.backward()
 
-        # ── Step 6: update weights ──
+        #  Step 6: update weights 
         # The optimizer uses the gradients to nudge all weights
         # in the direction that reduces loss (gradient descent)
         optimizer.step()
@@ -210,7 +210,7 @@ def train_one_epoch(
     return total_loss / len(dataloader)
 
 
-# ── PART 4: Inference with Threshold ─────────────────────────────────────────
+#  PART 4: Inference with Threshold
 #
 # After training, we use the model to make predictions on new sentences.
 #
@@ -299,7 +299,7 @@ def predict_with_threshold(
     return predictions
 
 
-# ── Example Usage ─────────────────────────────────────────────────────────────
+#  Example Usage
 
 if __name__ == "__main__":
     print("Multi-Label Classifier — Design Requirement Tagger")
