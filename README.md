@@ -1,4 +1,4 @@
-# Multi-Label Text Classifier — PyTorch
+# Multi-Label Text Classifier using PyTorch
 
 A PyTorch implementation of multi-label text classification using a pretrained encoder (BERT) and a custom classification head. Built as a solution to an ML engineering interview problem.
 
@@ -74,13 +74,13 @@ python multilabel_classifier.py
 ## Key Design Decisions
 
 **Why BCEWithLogitsLoss?**
-Each class is treated as an independent binary question. "With Logits" means sigmoid is applied internally — more numerically stable than applying it manually before the loss.
+Each class is treated as an independent binary question. "With Logits" means sigmoid is applied internally, more numerically stable than applying it manually before the loss.
 
 **Why the CLS token?**
 BERT trains its position-0 output to summarize the entire input sequence, making it the natural choice for sentence-level classification.
 
 **Why a threshold instead of argmax?**
-Argmax always picks exactly one winner. A threshold lets multiple classes win when the model is confident about several — which is the whole point of multi-label classification.
+Argmax always picks exactly one winner. A threshold lets multiple classes win when the model is confident about several, which is the whole point of multi-label classification.
 
 ## Requirements
 
