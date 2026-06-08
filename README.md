@@ -40,7 +40,7 @@ threshold filter (≥ 0.5)      ← only predict confident classes
 
 ```
 multilabel-text-classifier/
-├── multilabel_classifier.py  # Full solution with detailed comments
+├── multilabel_classifier.py  
 ├── requirements.txt
 └── README.md
 ```
